@@ -1,6 +1,5 @@
 # Reproducible Research: Peer Assessment 1
 
-<<<<<<< HEAD
 <!--
 To knit this RMD file, run:
 knit2html("PA1_template.Rmd");browseURL("PA1_template.html")
@@ -14,19 +13,11 @@ The dataset is stored in a comma-separated-value (CSV) file and there are a tota
 
 The following packages are used to produce this report:
 
-=======
-
-
-
-
-## Loading and preprocessing the data
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 
 ```r
 library(ggplot2)
 library(knitr)
 library(scales)
-<<<<<<< HEAD
 ```
 
 
@@ -36,27 +27,17 @@ Read the provided dataset:
 ```r
 data <- read.csv(unz("activity.zip", "activity.csv"), colClasses = c("numeric", 
     "Date", "numeric"))
-=======
-
-data <- read.csv(unz("activity.zip", "activity.csv"), colClasses = c("numeric", 
-    "Date", "numeric"))
-daily <- aggregate(steps ~ date, data = data, FUN = sum)
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 ```
 
 
 ## What is the mean total number of steps taken per day?
 
-<<<<<<< HEAD
 First the total number of steps is calculated for each day, and the histogram represents its distribution.  Days without data are not represented for this part of the report.  In fact, the processing step implicitly ignored missing data.
 
 
 ```r
 daily <- aggregate(steps ~ date, data = data, FUN = sum)
 
-=======
-```r
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 hist1 <- qplot(steps, data = daily, binwidth = 2000)
 hist1 + scale_y_continuous(breaks = seq(0, 16, 5), minor_breaks = seq(0, 16, 
     1)) + scale_x_continuous(breaks = seq(0, 20000, 4000))
@@ -65,17 +46,11 @@ hist1 + scale_y_continuous(breaks = seq(0, 16, 5), minor_breaks = seq(0, 16,
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
 
 
-<<<<<<< HEAD
 The mean of the total number of steps per day is calculated to be 10766 steps, as below:
 
 
 ```r
 mean(daily$steps)
-=======
-
-```r
-mean(daily$steps, na.rm = TRUE)
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 ```
 
 ```
@@ -83,11 +58,7 @@ mean(daily$steps, na.rm = TRUE)
 ```
 
 ```r
-<<<<<<< HEAD
 median(daily$steps)
-=======
-median(daily$steps, na.rm = TRUE)
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 ```
 
 ```
@@ -97,12 +68,9 @@ median(daily$steps, na.rm = TRUE)
 
 ## What is the average daily activity pattern?
 
-<<<<<<< HEAD
 The total number of steps, while previously summed for each day, is now summed for each 5-minute interval across all days with valid data.
 
 
-=======
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 ```r
 daily2 <- aggregate(steps ~ interval, data = data, FUN = mean)
 daily2 <- transform(daily2, interval_time = strptime(sprintf("%04d", interval), 
@@ -114,11 +82,8 @@ tseries + scale_x_datetime(breaks = "2 hours", labels = date_format("%H:%M"))
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
 
-<<<<<<< HEAD
 The 5-minute time interval of the day with the highest average number of steps is from 8:35 AM to 8:40 AM, at 206.2 steps.
 
-=======
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 
 ```r
 daily2[which.max(daily2$steps), c(1, 2)]
@@ -132,12 +97,9 @@ daily2[which.max(daily2$steps), c(1, 2)]
 
 ## Imputing missing values
 
-<<<<<<< HEAD
 To analyze the missing data, a boolean array is created to mark the NA's, and summing it reveals that there are 2304 missing values.
 
 
-=======
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 ```r
 na_index = is.na(data$steps)
 sum(na_index)
@@ -148,7 +110,6 @@ sum(na_index)
 ```
 
 
-<<<<<<< HEAD
 Additionally, by examining the number of missing values for each day, it appears that the value is either complete, or completely missing for each day.  There are 8 days with no data.
 
 
@@ -184,39 +145,25 @@ sapply(split(data, data$date), function(x) sum(is.na(x$steps)))
 
 
 Imputing for missing data, the average of that 5-minutes interval is used to fill in, which was calculated in the last section.  For example, in the very first row, 2012-10-01, interval 0, steps count is missing.  Filling in will be the average number of steps in interval 0 for every day where the interval 0 steps count is available.
-=======
-For any missing data, fill in the average of that 5-minutes interval, calculated in the last section.
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 
 
 ```r
 imputed <- data
-<<<<<<< HEAD
 imputed[na_index, "steps"] <- rep(daily2$steps, length.out = nrow(data))[na_index]
 ```
 
 
 Following the same proceduce as before, a daily sum is computed, with a histogram generated below:
-=======
-imputed[na_index, "steps"] = rep(daily2$steps, length.out = nrow(data))[na_index]
-```
-
-
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 
 
 ```r
-daily_imputed <- aggregate(steps ~ date, data = daily_imputed, FUN = sum)
+daily_imputed <- aggregate(steps ~ date, data = imputed, FUN = sum)
 hist2 <- qplot(steps, data = daily_imputed, binwidth = 2000)
 hist2 + scale_y_continuous(breaks = seq(0, 24, 5), minor_breaks = seq(0, 24, 
     1)) + scale_x_continuous(breaks = seq(0, 20000, 4000))
 ```
 
-<<<<<<< HEAD
 ![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
-=======
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9.png) 
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 
 
 Since we're only replacing the missing data with the existing average, and that missing values appear in groups of entire days (i.e. either a whole day of data is missing, or no data is missing), the above histogram shows that after imputing, those days originally missing data now have a total steps number equal to the average number of total steps in a day.
@@ -239,20 +186,13 @@ median(daily_imputed$steps)
 ```
 
 
-<<<<<<< HEAD
 This method of imputing data does not affect the estimation of the total number of steps taken each day.  That is, the mean of total steps per day is unchanged.  On the other hand, the median has changed and is now equal to the mean, because there are now a few days with steps sum equal to the mean.
-=======
-This method of imputing data does not affect the estimation of the total number of steps taken each day.  That is, the mean of total steps per day is unchanged.  On the other hand, the median has changed and is now equal to the mean, because there are now a lot more days with steps sum equal to the mean.
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-<<<<<<< HEAD
 A new factor variable is added to the imputed data set to indicate whether a given date is a weekday or a weekend day.
 
-=======
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 
 ```r
 imputed$weekend <- as.numeric(format(imputed$date, "%u"))
@@ -262,11 +202,8 @@ imputed$weekend <- as.factor(imputed$weekend)
 ```
 
 
-<<<<<<< HEAD
 The following time series plot shows the average number of steps taken during each time interval, separately for weekday/weekend.
 
-=======
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 
 ```r
 imputed <- transform(imputed, interval_time = strptime(sprintf("%04d", interval), 
@@ -277,10 +214,6 @@ tseries2 + stat_summary(fun.y = "mean", geom = "line") + facet_grid(weekend ~
     .) + scale_x_datetime(breaks = "2 hours", labels = date_format("%H:%M"))
 ```
 
-<<<<<<< HEAD
 ![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13.png) 
-=======
-![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12.png) 
->>>>>>> 91d9f7b0f31d6214eaeb1ef7b54370a727e5d12c
 
 
